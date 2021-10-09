@@ -1,11 +1,26 @@
 const { Client, Intents, Collection } = require('discord.js');
 const { exec } = require('child_process');
 const client = new Client({ intents: Object.values(Intents.FLAGS) });
-const bot_token = "BOT TOKEN HERE"
+const bot_token = 'BOT TOKEN HERE'
 
 const fs = require('fs');
 const { PassThrough } = require('stream');
 const prefix = '!';
+
+var today = new Date()
+var day = today.getDay()
+var hour = today.getHours()
+var state = 'AM'
+
+if(hour>=12){
+	state = 'PM' 
+	}
+	
+if(hour	> 12){
+	hour -= 12
+	}
+	
+var minute = today.getMinutes()
 
 client.commands = new Collection();
 
@@ -36,14 +51,10 @@ client.on('message', message =>{
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.channels.cache.get("CHANNEL ID HERE").send(`Started at ${hour}:${minute}${state}`);
 });
-var today = new Date()
-var day = today.getDay()
-var time = today.getHours()
-
 
 client.login(bot_token)
-
 /*
 *
 *
@@ -66,10 +77,11 @@ const dumbAssStuff =async (msg) => {
 			break;
 		default:
 	}
-	if(msg.content === 'restart'){
-		if(msg.author.id !== '226298201773178884') return;  
-			await msg.channel.send('Restarting!').then (() =>{
+	if(msg.content === 'close'){
+		if(msg.author.id !== 'DISCORD USER ID HERE') return;  
+			await client.channels.cache.get("CHANNEL ID HERE").send(`Closed at ${hour}:${minute}${state}`).then (() =>{
 			  client.destroy();
 				})
 			}
 }
+
