@@ -12,13 +12,13 @@ var day = today.getDay()
 var hour = today.getHours()
 var state = 'AM'
 
-if(hour>=12){
+if(hour >= 12){
 	state = 'PM' 
-	}
+}
 	
 if(hour	> 12){
 	hour -= 12
-	}
+}
 	
 var minute = today.getMinutes()
 
@@ -75,10 +75,29 @@ const dumbAssStuff =async (msg) => {
 		case '!wednesday':
 			await msg.channel.send('https://tenor.com/view/wooper-wednesday-wooper-wednesday-pokemon-gif-21444101');
 			break;
+		
+		case '!innocent':
+			await msg.channel.send('https://tenor.com/view/amazing-world-of-gumball-gumball-crying-gumball-fast-forward-fast-forward-gif-dscify-gif-20832789');
+			break;	
 		default:
 	}
 	if(msg.content === 'close'){
-		if(msg.author.id !== 'DISCORD USER ID HERE') return;  
+		let today = new Date()
+let day = today.getDay()
+let hour = today.getHours()
+let state = 'AM'
+
+if(hour >= 12){
+	state = 'PM' 
+}
+	
+if(hour	> 12){
+	hour -= 12
+}
+	
+let minute = today.getMinutes()
+
+		if(msg.author.id !== 'DISCORD ID HERE') return;  
 			await client.channels.cache.get("CHANNEL ID HERE").send(`Closed at ${hour}:${minute}${state}`).then (() =>{
 			  client.destroy();
 				})
