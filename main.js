@@ -2,25 +2,20 @@ const { Client, Intents, Collection } = require('discord.js');
 const { exec } = require('child_process');
 const client = new Client({ intents: Object.values(Intents.FLAGS) });
 const bot_token = 'BOT TOKEN HERE'
-
+const { MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const { PassThrough } = require('stream');
 const prefix = '!';
 
 var today = new Date()
 var day = today.getDay()
-var hour = today.getHours()
+var hour = today.getHours()	
+var minute = today.getMinutes()
 var state = 'AM'
 
 if(hour >= 12){
-	state = 'PM' 
+	state = 'PM'
 }
-	
-if(hour	> 12){
-	hour -= 12
-}
-	
-var minute = today.getMinutes()
 
 client.commands = new Collection();
 
@@ -50,8 +45,23 @@ client.on('message', message =>{
 
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  client.channels.cache.get("CHANNEL ID HERE").send(`Started at ${hour}:${minute}${state}`);
+	const channel = client.channels.cache.find(channel => channel.name === 'CHANNEL NAME HERE')
+	
+	if(hour > 12){
+		newhour = hour - 12
+		
+	}
+	const exampleEmbed = new MessageEmbed()
+	.setColor('#6DFF5E')
+	.setTitle('Bot Status')
+	.addFields(
+		{ name: 'Bot is Now Online!  <:green_circle:896616948257918986>', value: `Online at ${newhour}:${minute} ${state}`},
+		
+	)
+
+
+    channel.send(exampleEmbed);
+	console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.login(bot_token)
@@ -81,26 +91,37 @@ const dumbAssStuff =async (msg) => {
 			break;	
 		default:
 	}
+	
+	
 	if(msg.content === 'close'){
-		let today = new Date()
-let day = today.getDay()
-let hour = today.getHours()
-let state = 'AM'
-
-if(hour >= 12){
-	state = 'PM' 
-}
+	if(msg.author.id != 'ID HERE') return;
 	
-if(hour	> 12){
-	hour -= 12
-}
-	
-let minute = today.getMinutes()
+		var offtoday = new Date()
+var offday = offtoday.getDay()
+var offhour = offtoday.getHours()
+var offminute = offtoday.getMinutes()
+const channel = client.channels.cache.find(channel => channel.name === 'CHANNEL NAME HERE')
 
-		if(msg.author.id !== 'DISCORD ID HERE') return;  
-			await client.channels.cache.get("CHANNEL ID HERE").send(`Closed at ${hour}:${minute}${state}`).then (() =>{
-			  client.destroy();
-				})
-			}
+var onhour = offhour - hour 
+var onminute = offminute - minute
+
+if(onminute < 0){
+	onhour -= 1 
+	onminute += 60
+	
+}
+	const endEmbed = new MessageEmbed()
+	.setColor('#FF4242')
+	.setTitle('Bot Status')
+	.addFields(
+		{ name: 'Bot is Now Offline!  <:red_circle:896436659699200060>', value: `Online for ${onhour} hours and ${onminute} minutes`},
+		
+	)
+	channel.send(endEmbed).then(() => {
+		client.destroy()
+		})
+			
+				
+	}
 }
 
